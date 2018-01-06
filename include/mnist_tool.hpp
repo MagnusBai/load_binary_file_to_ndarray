@@ -24,9 +24,10 @@ uint32_t swap_endian(uint32_t val) {
     return (val << 16) | (val >> 16);
 }
 
-bool createTrainLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W);
+bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W);
+bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W);
 
-bool createTrainLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W) {
+bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W) {
   std::ifstream label_file(path, std::ios::in | std::ios::binary);
   {
     __ERRORHANDLE__ if(!label_file.good()) return false;
@@ -58,7 +59,7 @@ bool createTrainLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_ma
   return true;
 }
 
-bool createTrainImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W) {
+bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W) {
   std::ifstream image_file(path, std::ios::in | std::ios::binary);
 
   uint32_t magic, num_items, rows, cols;
