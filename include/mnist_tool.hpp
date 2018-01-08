@@ -24,10 +24,13 @@ uint32_t swap_endian(uint32_t val) {
     return (val << 16) | (val >> 16);
 }
 
-bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W);
-bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W);
+bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, \
+  uint32_t& OUT H, uint32_t& OUT W);
+bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, \
+  uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W);
 
-bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT H, uint32_t& OUT W) {
+bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, \
+  uint32_t& OUT H, uint32_t& OUT W) {
   std::ifstream label_file(path, std::ios::in | std::ios::binary);
   {
     __ERRORHANDLE__ if(!label_file.good()) return false;
@@ -59,13 +62,21 @@ bool createLabelsIdx1Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, ui
   return true;
 }
 
-bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W) {
+bool createImagesIdx3Ubyte(const char* IN path, shared_ptr<int>& OUT ptr_mat, \
+  uint32_t& OUT N, uint32_t& OUT H, uint32_t& OUT W) {
   std::ifstream image_file(path, std::ios::in | std::ios::binary);
+  {
+    __ERRORHANDLE__ if(!image_file.good()) return false;
+  }
 
-  uint32_t magic, num_items, rows, cols;
-
-  image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
+  uint32_t num_items, rows, cols;
+  {
+    uint32_t magic;
+    image_file.read(reinterpret_cast<char*>(&magic), 4);
+    __ERRORHANDLE__ if(!image_file.good()) return false;
+    magic = swap_endian(magic);
+    __ERRORHANDLE__ if(magic!=2051) return false;
+  }
 
   image_file.read(reinterpret_cast<char*>(&num_items), 4);
   num_items = swap_endian(num_items);
