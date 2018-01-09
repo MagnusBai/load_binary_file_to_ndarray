@@ -1,1 +1,1 @@
-# load binary file to ndarray
+# Load binary file to ndarray
